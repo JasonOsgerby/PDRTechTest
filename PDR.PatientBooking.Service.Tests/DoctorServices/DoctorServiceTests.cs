@@ -94,6 +94,7 @@ namespace PDR.PatientBooking.Service.Tests.DoctorServices
 
             var expected = new Doctor
             {
+                Id = 1,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Gender = (int)request.Gender,
@@ -107,7 +108,7 @@ namespace PDR.PatientBooking.Service.Tests.DoctorServices
             _doctorService.AddDoctor(request);
 
             //assert
-            _context.Doctor.Should().ContainEquivalentOf(expected, options => options.Excluding(doctor => doctor.Id));
+            _context.Doctor.Should().ContainEquivalentOf(expected, options => options.Including(doctor => doctor.Id));
         }
 
         [Test]

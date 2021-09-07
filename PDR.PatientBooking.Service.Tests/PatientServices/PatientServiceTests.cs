@@ -95,6 +95,7 @@ namespace PDR.PatientBooking.Service.Tests.PatientServices
 
             var expected = new Patient
             {
+                Id = 1,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Gender = (int)request.Gender,
@@ -109,7 +110,7 @@ namespace PDR.PatientBooking.Service.Tests.PatientServices
             _patientService.AddPatient(request);
 
             //assert
-            _context.Patient.Should().ContainEquivalentOf(expected, options => options.Excluding(patient => patient.Id));
+            _context.Patient.Should().ContainEquivalentOf(expected, options => options.Including(patient => patient.Id));
         }
 
         [Test]
