@@ -55,7 +55,7 @@ namespace PDR.PatientBooking.Service.BookingServices.Validation
 
         private bool CheckBookingExists(CancelBookingRequest request, ref PdrValidationResult result)
         {
-            if (_context.Order.Any(o => o.Id == request.BookingId))
+            if (_context.Order.Any(o => o.Id == request.BookingId && o.Cancelled == false))
             {
                 result.PassedValidation = false;
                 result.Errors.Add("Specified booking does not exist");
@@ -79,7 +79,7 @@ namespace PDR.PatientBooking.Service.BookingServices.Validation
 
         private bool CheckDoctorNotAlreadyBooked(AddBookingRequest request, ref PdrValidationResult result)
         {
-            if (_context.Order.Any(o => o.DoctorId == request.DoctorId && o.StartTime >= request.StartTime && o.EndTime <= request.EndTime))
+            if (_context.Order.Any(o => o.DoctorId == request.DoctorId && o.StartTime >= request.StartTime && o.EndTime <= request.EndTime && o.Cancelled == false))
             {
                 result.PassedValidation = false;
                 result.Errors.Add("Doctor already booked between specified start and end times");

@@ -176,7 +176,7 @@ namespace PDR.PatientBooking.Service.Tests.BookingServices
         }
 
         [Test]
-        public void CancelBooking_RemovesBookingFromContext()
+        public void CancelBooking_MarksOrderAsCancelled()
         {
             //arrange
             var id = Guid.Parse("683074b8-44c9-468b-9288-dfafa1e533c9");
@@ -186,11 +186,44 @@ namespace PDR.PatientBooking.Service.Tests.BookingServices
                 BookingId = id
             };
 
+            var expected = new Order
+            {
+                Id = id,
+                Cancelled = true
+            };
+
             //act
             _bookingService.CancelBooking(request);
 
             //assert
-            _context.Order.Should().NotContain(x => x.Id == id);
+            _context.Order.Should().ContainEquivalentOf(expected,
+               options => options.Including(order => order.Id)
+               .Including(order => order.Cancelled)
+           );
+        }
+
+        [Test]
+        public void GetPatientNextAppointment_RetrievesCorrectBooking()
+        {
+            //arrange
+            var booking = new AddBookingRequest
+            {
+                PatientId = 100,
+                DoctorId = 1,
+                StartTime = DateTime.UtcNow.AddHours(24),
+                EndTime = DateTime.UtcNow.AddHours(25)
+            };
+
+            _bookingService.AddBooking(booking);
+
+            //act
+            var order = _bookingService.GetPatientNextBooking(100);
+
+            //assert
+            Assert.AreEqual(order.PatientId, booking.PatientId);
+            Assert.AreEqual(order.DoctorId, booking.DoctorId);
+            Assert.AreEqual(order.StartTime, booking.StartTime);
+            Assert.AreEqual(order.EndTime, booking.EndTime);
         }
     }
 }

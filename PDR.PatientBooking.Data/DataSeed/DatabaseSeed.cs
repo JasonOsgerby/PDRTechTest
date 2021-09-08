@@ -37,31 +37,36 @@ namespace PDR.PatientBooking.Data.DataSeed
                 {
                     Id = Guid.Parse("683074b8-44c9-468b-9288-dfafa1e533c9"),
                     StartTime = new DateTime(2020, 1, 11, 12, 15, 00),
-                    EndTime = new DateTime(2020, 1, 11, 12, 30, 00)
+                    EndTime = new DateTime(2020, 1, 11, 12, 30, 00),
+                    Cancelled = false
                 },
                 new Order
                 {
                     Id = Guid.Parse("57706153-7600-41fd-8a5e-dc60a584e21c"),
                     StartTime = new DateTime(2020, 1, 11, 12, 30, 00),
-                    EndTime = new DateTime(2020, 1, 11, 12, 45, 00)
+                    EndTime = new DateTime(2020, 1, 11, 12, 45, 00),
+                    Cancelled = false
                 },
                 new Order
                 {
                     Id = Guid.Parse("b6aad474-5b5d-42b7-a274-1a94f74ff69a"),
                     StartTime = new DateTime(2020, 1, 11, 14, 15, 00),
-                    EndTime = new DateTime(2020, 1, 11, 14, 30, 00)
+                    EndTime = new DateTime(2020, 1, 11, 14, 30, 00),
+                    Cancelled = false
                 },
                 new Order
                 {
                     Id = Guid.Parse("b67c2730-0c12-4236-9b1a-d5b1d22db247"),
                     StartTime = new DateTime(2021, 1, 11, 12, 15, 00),
-                    EndTime = new DateTime(2021, 1, 11, 12, 30, 00)
+                    EndTime = new DateTime(2021, 1, 11, 12, 30, 00),
+                    Cancelled = false
                 },
                 new Order
                 {
                     Id = Guid.Parse("31924ff1-c64e-4e1e-977e-704abc062aa4"),
                     StartTime = new DateTime(2021, 1, 12, 12, 15, 00),
-                    EndTime = new DateTime(2021, 1, 12, 12, 30, 00)
+                    EndTime = new DateTime(2021, 1, 12, 12, 30, 00),
+                    Cancelled = false
                 }
             };
 

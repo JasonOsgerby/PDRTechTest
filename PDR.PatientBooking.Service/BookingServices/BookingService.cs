@@ -45,7 +45,8 @@ namespace PDR.PatientBooking.Service.BookingServices
                 DoctorId = bookingDoctorId,
                 Patient = bookingPatient,
                 Doctor = bookingDoctor,
-                SurgeryType = (int)bookingSurgeryType
+                SurgeryType = (int)bookingSurgeryType,
+                Cancelled = false
             });
 
             _context.SaveChanges();
@@ -64,9 +65,18 @@ namespace PDR.PatientBooking.Service.BookingServices
 
             if (booking != null)
             {
-                _context.Remove(booking);
+                booking.Cancelled = true;
                 _context.SaveChanges();
             }
+        }
+
+        public Order GetPatientNextBooking(long patientId)
+        {
+            return _context.Order.Where(x =>
+                x.PatientId == patientId &&
+                x.StartTime > DateTime.UtcNow &&
+                x.Cancelled == false)
+            .OrderBy(x => x.StartTime).FirstOrDefault();
         }
     }
 }
