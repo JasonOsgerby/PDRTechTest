@@ -50,5 +50,23 @@ namespace PDR.PatientBooking.Service.BookingServices
 
             _context.SaveChanges();
         }
+
+        public void CancelBooking(CancelBookingRequest request)
+        {
+            var validationResult = _validator.ValidateRequest(request);
+
+            if (!validationResult.PassedValidation)
+            {
+                throw new ArgumentException(validationResult.Errors.First());
+            }
+
+            var booking = _context.Order.FirstOrDefault(f => f.Id == request.BookingId);
+
+            if (booking != null)
+            {
+                _context.Remove(booking);
+                _context.SaveChanges();
+            }
+        }
     }
 }

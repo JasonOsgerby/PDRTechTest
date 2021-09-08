@@ -56,6 +56,9 @@ namespace PDR.PatientBooking.Service.Tests.BookingServices
         {
             _validator.Setup(x => x.ValidateRequest(It.IsAny<AddBookingRequest>()))
                 .Returns(new PdrValidationResult(true));
+
+            _validator.Setup(x => x.ValidateRequest(It.IsAny<CancelBookingRequest>()))
+                .Returns(new PdrValidationResult(true));
         }
 
         [Test]
@@ -130,6 +133,64 @@ namespace PDR.PatientBooking.Service.Tests.BookingServices
                 .Including(order => order.StartTime)
                 .Including(order => order.EndTime)
             );
+        }
+
+        [Test]
+        public void CancelBooking_ValidatesRequest()
+        {
+            //arrange
+            var id = Guid.Parse("683074b8-44c9-468b-9288-dfafa1e533c9");
+
+            var request = new CancelBookingRequest
+            {
+                BookingId = id
+            };
+
+            //act
+            _bookingService.CancelBooking(request);
+
+            //assert
+            _validator.Verify(x => x.ValidateRequest(request), Times.Once);
+        }
+
+        [Test]
+        public void CancelBooking_ValidatorFails_ThrowsArgumentException()
+        {
+            //arrange
+            var failedValidationResult = new PdrValidationResult(false, _fixture.Create<string>());
+
+            var id = Guid.Parse("00000000-0000-0000-0000-000000000000");
+
+            var request = new CancelBookingRequest
+            {
+                BookingId = id
+            };
+
+            _validator.Setup(x => x.ValidateRequest(It.IsAny<CancelBookingRequest>())).Returns(failedValidationResult);
+
+            //act
+            var exception = Assert.Throws<ArgumentException>(() => _bookingService.CancelBooking(request));
+
+            //assert
+            exception.Message.Should().Be(failedValidationResult.Errors.First());
+        }
+
+        [Test]
+        public void CancelBooking_RemovesBookingFromContext()
+        {
+            //arrange
+            var id = Guid.Parse("683074b8-44c9-468b-9288-dfafa1e533c9");
+
+            var request = new CancelBookingRequest
+            {
+                BookingId = id
+            };
+
+            //act
+            _bookingService.CancelBooking(request);
+
+            //assert
+            _context.Order.Should().NotContain(x => x.Id == id);
         }
     }
 }

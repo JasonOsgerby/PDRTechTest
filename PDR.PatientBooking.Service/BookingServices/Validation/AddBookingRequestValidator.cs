@@ -31,12 +31,34 @@ namespace PDR.PatientBooking.Service.BookingServices.Validation
             return result;
         }
 
+        public PdrValidationResult ValidateRequest(CancelBookingRequest request)
+        {
+            var result = new PdrValidationResult(true);
+
+            if (CheckBookingExists(request, ref result))
+                return result;
+
+            return result;
+        }
+
         private bool CheckPatientExists(AddBookingRequest request, ref PdrValidationResult result)
         {
             if (_context.Order.Any(o => o.PatientId == request.PatientId))
             {
                 result.PassedValidation = false;
                 result.Errors.Add("Specified patient does not exist");
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool CheckBookingExists(CancelBookingRequest request, ref PdrValidationResult result)
+        {
+            if (_context.Order.Any(o => o.Id == request.BookingId))
+            {
+                result.PassedValidation = false;
+                result.Errors.Add("Specified booking does not exist");
                 return true;
             }
 
@@ -51,6 +73,7 @@ namespace PDR.PatientBooking.Service.BookingServices.Validation
                 result.Errors.Add("Specified booking start time is in the past");
                 return true;
             }
+
             return false;
         }
 
