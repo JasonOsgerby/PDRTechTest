@@ -3,7 +3,6 @@ using PDR.PatientBooking.Data;
 using PDR.PatientBooking.Service.BookingServices;
 using PDR.PatientBooking.Service.BookingServices.Requests;
 using System;
-using System.Linq;
 
 namespace PDR.PatientBookingApi.Controllers
 {
@@ -11,12 +10,10 @@ namespace PDR.PatientBookingApi.Controllers
     [ApiController]
     public class BookingController : ControllerBase
     {
-        private readonly PatientBookingContext _context;
         private readonly IBookingService _bookingService;
 
         public BookingController(PatientBookingContext context, IBookingService bookingService)
         {
-            _context = context;
             _bookingService = bookingService;
         }
 
